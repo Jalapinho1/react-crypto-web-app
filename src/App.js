@@ -1,23 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from 'react';
+import { Redirect, Route, Switch } from 'react-router';
+import Layout from './components/Layout/Layout';
+
+import LoginPage from './pages/LoginPage';
+import RegistrationPage from './pages/RegistrationPage';
+import KeyManagementPage from './pages/KeyManagementPage';
+import CryptoPage from './pages/CryptoPage';
+import { AuthContext } from './store/auth-context';
 
 function App() {
+
+  const authCtx = useContext(AuthContext);
+
+  const isLoggedIn = authCtx.isLoggedIn;
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Layout>
+        <Switch>
+          {!isLoggedIn &&
+            <Route path='/login' exact>
+              <LoginPage></LoginPage>
+            </Route>
+          }
+          {!isLoggedIn &&
+            <Route path='/register' exact>
+              <RegistrationPage></RegistrationPage>
+            </Route>
+          }
+          {isLoggedIn &&
+            <Route path='/keys' exact>
+              <KeyManagementPage></KeyManagementPage>
+            </Route>
+          }
+          {isLoggedIn &&
+            <Route path='/crypto' exact>
+              <CryptoPage></CryptoPage>
+            </Route>
+          }
+          {!isLoggedIn &&
+            <Route path='*'>
+              <Redirect to='/login'></Redirect>
+            </Route>
+          }
+          {isLoggedIn &&
+            <Route path='/*' exact>
+              <Redirect to='/keys'></Redirect>
+            </Route>
+          }
+        </Switch>
+      </Layout>
     </div>
   );
 }
