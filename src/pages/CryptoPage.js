@@ -1,7 +1,9 @@
+import FileEncryption from "../components/FileEncryption/FileEncryption";
+
 const CryptoPage = () => {
     return(
         <div>
-            Crypto page!
+            <FileEncryption></FileEncryption>
         </div>
     );
 }
