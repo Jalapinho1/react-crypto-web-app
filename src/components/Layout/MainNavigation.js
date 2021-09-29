@@ -2,22 +2,30 @@ import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { AuthContext } from "../../store/auth-context";
+import { KeyContext } from "../../store/key-management-context";
+
+import { RiLockPasswordFill } from "react-icons/ri";
 
 const MainNavigation = () => {
 
     const authCtx = useContext(AuthContext);
+    const keyCtx = useContext(KeyContext);
 
     const isLoggedIn = authCtx.isLoggedIn;
 
     const logoutHandler = () => {
         authCtx.logout();
+        keyCtx.removeKeys();
     };
 
     return (
         <header className='shadow-sm'>
             <Navbar className='shadow-sm' bg="primary" variant="dark">
                 <Container>
-                    <Navbar.Brand to='/'>Crypto web</Navbar.Brand>
+                    <Navbar.Brand to='/'>
+                        <RiLockPasswordFill className="mb-1 me-1"></RiLockPasswordFill>
+                        Crypto web
+                    </Navbar.Brand>
                     <Nav className="me-auto" >
                         {!isLoggedIn &&
                             <LinkContainer to="/login" exact={true}>

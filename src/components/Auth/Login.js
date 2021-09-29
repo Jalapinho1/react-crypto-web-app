@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../store/auth-context";
+import { KeyContext } from "../../store/key-management-context";
 
 
 const Login = () => {
@@ -18,6 +19,7 @@ const Login = () => {
     const history = useHistory();
 
     const authCtx = useContext(AuthContext);
+    const keyCtx = useContext(KeyContext);
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -60,12 +62,12 @@ const Login = () => {
             localStorage.setItem('expirationDate', expirationDate);
 
             authCtx.login(accessToken, "", expirationDate.toString());
-            console.log(accessToken);
 
+            keyCtx.removeKeys();
             history.push("/keys");
         }).catch(err => {
             console.log('Error!');
-            err.clone().json().then((body) => {
+            err.json().then((body) => {
                 setError(body.message);
                 setIsLoading(false);
             });

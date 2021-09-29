@@ -59,7 +59,7 @@ const AuthContextProvider = (props) => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('expTime');
-
+        
         if (logoutTimer) {
             clearTimeout(logoutTimer);
         }

@@ -6,14 +6,17 @@ import { BrowserRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthContextProvider from './store/auth-context';
+import KeyContextProvider from './store/key-management-context';
 
 ReactDOM.render(
   <AuthContextProvider>
-    <BrowserRouter>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </BrowserRouter>
+    <KeyContextProvider>
+      <BrowserRouter>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </BrowserRouter>
+    </KeyContextProvider>
   </AuthContextProvider>,
   document.getElementById('root')
 );

@@ -1,7 +1,9 @@
+import KeyManagement from "../components/KeyManagement/KeyManagement";
+
 const KeyManagementPage = () => {
     return(
         <div>
-            KeyManagementPage page!
+            <KeyManagement></KeyManagement>
         </div>
     );
 }
