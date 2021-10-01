@@ -47,8 +47,18 @@ const MainNavigation = () => {
                                 <Nav.Link>File encryption</Nav.Link>
                             </LinkContainer>
                         }
+                        {isLoggedIn &&
+                            <LinkContainer to="/files" exact={true}>
+                                <Nav.Link>File management</Nav.Link>
+                            </LinkContainer>
+                        }
                     </Nav>
                     <Nav>
+                        {isLoggedIn &&
+                            <Navbar.Text>
+                                Signed in as: <span className="text-white me-5">{authCtx.username}</span>
+                            </Navbar.Text>
+                        }
                         {isLoggedIn &&
                             <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
                         }

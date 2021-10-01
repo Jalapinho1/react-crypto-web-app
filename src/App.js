@@ -7,6 +7,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import KeyManagementPage from './pages/KeyManagementPage';
 import CryptoPage from './pages/CryptoPage';
 import { AuthContext } from './store/auth-context';
+import FileManagementPage from './pages/FileManagementPage';
 
 function App() {
 
@@ -36,6 +37,11 @@ function App() {
           {isLoggedIn &&
             <Route path='/crypto' exact>
               <CryptoPage></CryptoPage>
+            </Route>
+          }
+          {isLoggedIn &&
+            <Route path='/files' exact>
+              <FileManagementPage></FileManagementPage>
             </Route>
           }
           {!isLoggedIn &&
