@@ -33,15 +33,8 @@ const FileEncryption = () => {
         }
 
         const formData = new FormData();
-        formData.append(
-            "file",
-            file,
-            file.name
-        );
-        formData.append(
-            "publicKey",
-            keyCtx.publicKey
-        );
+        formData.append("file", file, file.name);
+        formData.append("publicKey", keyCtx.publicKey);
 
         let response = await fetch(
             `http://localhost:8080/api/encrypt`,
@@ -94,15 +87,8 @@ const FileEncryption = () => {
         }
 
         const formData = new FormData();
-        formData.append(
-            "file",
-            file,
-            file.name
-        );
-        formData.append(
-            "privateKey",
-            keyCtx.privateKey
-        );
+        formData.append("file", file, file.name);
+        formData.append("privateKey", keyCtx.privateKey);
 
         let response = await fetch(
             `http://localhost:8080/api/decrypt`,
@@ -140,7 +126,7 @@ const FileEncryption = () => {
 
     return (
         <Container className="mt-3">
-            <Card bg='light' className="light w-75 mx-auto mt-4">
+            <Card bg='light' className="shadow-sm light w-75 mx-auto mt-4">
                 <Card.Body>
                     <div>
                         <h4>File Encryption & Decryption</h4>

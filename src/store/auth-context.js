@@ -3,10 +3,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 let logoutTimer;
 
 export const AuthContext = React.createContext({
+    username: '',
     accessToken: '',
     refreshToken: '',
     isLoggedIn: false,
-    login: (token) => { },
+    login: () => { },
     logout: () => { }
 });
 
@@ -19,6 +20,7 @@ const calculateRemainingTime = (expirationTime) => {
 };
 
 const retrieveStoredToken = () => {
+    const storedUsername = localStorage.getItem('username');
     const storedToken = localStorage.getItem('accessToken');
     const storedRefreshToken = localStorage.getItem('refreshToken');
     const storedExpDate = localStorage.getItem('expTime');
@@ -26,6 +28,7 @@ const retrieveStoredToken = () => {
     const remainingTime = calculateRemainingTime(storedExpDate);
 
     if (remainingTime <= 60000) {
+        localStorage.removeItem('username');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('expTime');
@@ -34,6 +37,7 @@ const retrieveStoredToken = () => {
     }
 
     return {
+        username: storedUsername,
         accessToken: storedToken,
         refreshToken: storedRefreshToken,
         duration: remainingTime
@@ -42,13 +46,16 @@ const retrieveStoredToken = () => {
 
 const AuthContextProvider = (props) => {
     const tokenData = retrieveStoredToken();
+    let initialUsername;
     let initialAccessToken;
     let initialRefreshToken;
     if (tokenData){
+        initialUsername = tokenData.username;
         initialAccessToken = tokenData.accessToken;
         initialRefreshToken = tokenData.refreshToken;
     }
     
+    const [username, setUsername] = useState(initialUsername);
     const [accessToken, setAccessToken] = useState(initialAccessToken);
     const [refreshToken, setRefreshToken] = useState(initialRefreshToken);
 
@@ -56,6 +63,7 @@ const AuthContextProvider = (props) => {
 
     const logoutHandler = useCallback(() => {
         setAccessToken(null);
+        localStorage.removeItem('username');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('expTime');
@@ -65,9 +73,11 @@ const AuthContextProvider = (props) => {
         }
     }, []);
 
-    const loginHandler = (accessToken, refreshToken, expirationTime) => {
+    const loginHandler = (username, accessToken, refreshToken, expirationTime) => {
+        setUsername(username);
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
+        localStorage.setItem('username', username);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('expTime', expirationTime);
@@ -85,6 +95,7 @@ const AuthContextProvider = (props) => {
     }, [tokenData, logoutHandler]);
 
     const contextValue = {
+        username: username,
         accessToken: accessToken,
         refreshToken: refreshToken,
         isLoggedIn: userIsLoggedIn,

@@ -58,10 +58,8 @@ const Login = () => {
             //const refreshToken = tokens.refresh_token;
 
             const expirationDate = new Date(new Date().getTime() + 500 * 1000);
-            localStorage.setItem('token', accessToken);
-            localStorage.setItem('expirationDate', expirationDate);
 
-            authCtx.login(accessToken, "", expirationDate.toString());
+            authCtx.login(usernameInputRef.current.value, accessToken, "", expirationDate.toString());
 
             keyCtx.removeKeys();
             history.push("/keys");
@@ -83,7 +81,7 @@ const Login = () => {
             <Card bg='light' className="light w-50 mx-auto mt-5">
                 <Card.Body>
                     <div>
-                        <h3>Login Form</h3>
+                        <h4>Login Form</h4>
                     </div>
                     <Form>
                         <Form.Group controlId="formBasicUsername" className="mb-3">

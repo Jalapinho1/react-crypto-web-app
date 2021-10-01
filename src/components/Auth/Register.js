@@ -78,7 +78,7 @@ const Register = () => {
             <Card bg='light' className="light w-50 mx-auto mt-5">
                 <Card.Body>
                     <div>
-                        <h3>Register Form</h3>
+                        <h4>Register Form</h4>
                     </div>
                     <Form>
                         <Form.Group controlId="formBasicUsername" className="mb-3">
