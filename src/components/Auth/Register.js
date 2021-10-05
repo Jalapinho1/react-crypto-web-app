@@ -1,10 +1,13 @@
 import { useContext, useRef, useState } from "react";
-import { Card, Container, Form, Spinner } from "react-bootstrap";
+import { Card, Container, Form, Image, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../store/auth-context";
+
+import classes from "./Auth.module.css";
+import register from "../../assets/register.png";
 
 const Register = () => {
     const usernameInputRef = useRef();
@@ -77,23 +80,18 @@ const Register = () => {
         <Container>
             <Card bg='light' className="light w-50 mx-auto mt-5">
                 <Card.Body>
-                    <div>
-                        <h4>Register Form</h4>
-                    </div>
-                    <Form>
+                    <Form className={classes.formSignin}>
+                        <div className="text-center mx-auto" >
+                            <Image className={classes.logo} src={register} rounded />
+                        </div>
+                        <h1 class="h3 my-4 text-center">Please register</h1>
                         <Form.Group controlId="formBasicUsername" className="mb-3">
-                            <Form.Label>Username</Form.Label>
                             <Form.Control type="text" placeholder="Username" ref={usernameInputRef} />
-                            <Form.Text className="text-muted">
-                                We'll never share your username with anyone else.
-                            </Form.Text>
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword" className="mb-3">
-                            <Form.Label>Password</Form.Label>
                             <Form.Control type={isPasswordShown ? "text" : "password"} placeholder="Password" ref={passwordInputRef} />
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword" className="mb-3">
-                            <Form.Label>Repeat Password</Form.Label>
                             <Form.Control type={isPasswordShown ? "text" : "password"} placeholder="Repeat Password" ref={passwordRepeatInputRef} />
                         </Form.Group>
                         <Form.Group controlId="formBasicCheckbox" className="mb-3">
@@ -101,17 +99,9 @@ const Register = () => {
                                 onChange={() => togglePasswordVisibility()} />
                         </Form.Group>
                         <Form.Group>
-                            <Button className="mr-3" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
+                            <Button className="mr-3 w-100" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
                                 Register
                             </Button>
-                            <span className="float-end mx-auto">
-                                <span className="me-2">
-                                    Already have an account?
-                                </span>
-                                <Link className='btn btn-primary px-3 mx-auto' to={`/login`}>
-                                    Login
-                                </Link>
-                            </span>
                             {isLoading ?
                                 <div className="ml-2 mt-3">
                                     <span>
@@ -122,6 +112,15 @@ const Register = () => {
                                 : null}
                             <div className="text-danger my-3">
                                 {error ? error : null}
+                            </div>
+                            <hr></hr>
+                            <div className="text-center mx-auto">
+                                <span className="me-2">
+                                    Already have an account?
+                                </span>
+                                <Link className='btn btn-success px-3 mx-auto' to={`/login`}>
+                                    Login
+                                </Link>
                             </div>
                         </Form.Group>
                     </Form>
