@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Card, OverlayTrigger, Row, Spinner, Table, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Row, Spinner, Table, Tooltip } from "react-bootstrap";
 import { AuthContext } from "../../store/auth-context";
 
 import { FaDownload } from "react-icons/fa";
@@ -100,61 +100,54 @@ const FileList = () => {
     }
 
     return (
-        <Card bg='light' className="shadow-sm my-4">
-            <Card.Body>
-                <Row>
-                    <h4 className="text-left mt-2">File list</h4>
-                </Row>
-                <Row>
-                    {isLoading &&
-                        <div>
-                            <Spinner animation="border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner>
-                        </div>}
-                    <div>
-                        <Table className="shadow-sm bg-white mt-3" bordered hover>
-                            <thead>
-                                <tr>
-                                    <th>File name</th>
-                                    <th>Sender</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {files.map(file => <tr key={file.id}>
-                                    <OverlayTrigger
-                                        placement="left"
-                                        delay={{ show: 200, hide: 200 }}
-                                        overlay={renderTooltipOpen}>
-                                        <td
-                                            className={classes.pointercursor}
-                                            onClick={() => onFileItemOpenHandler(file)}>
-                                            {file.filename}
-                                        </td>
-                                    </OverlayTrigger>
-                                    <td>{file.senderUsername}</td>
-                                    <OverlayTrigger
-                                        placement="top"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={renderTooltipDownload}>
-                                        <td className="text-center">
-                                            {file.downloadable &&
-                                                <FaDownload
-                                                    onClick={() => onDownloadHandler(file)}>
-                                                </FaDownload>
-                                            }
-                                        </td>
-                                    </OverlayTrigger>
-                                </tr>)}
-                            </tbody>
-                        </Table>
-                    </div>
-                </Row>
-            </Card.Body>
+        <Row>
+            {isLoading &&
+                <div>
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>}
+            <div>
+                <Table className={classes.tableLong + " shadow-sm bg-white mt-3"} bordered hover>
+                    <thead>
+                        <tr>
+                            <th>File name</th>
+                            <th>Sender</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {files.map(file => <tr key={file.id}>
+                            <OverlayTrigger
+                                placement="top"
+                                delay={{ show: 200, hide: 200 }}
+                                overlay={renderTooltipOpen}>
+                                <td
+                                    className={classes.pointercursor}
+                                    onClick={() => onFileItemOpenHandler(file)}>
+                                    {file.filename}
+                                </td>
+                            </OverlayTrigger>
+                            <td>{file.senderUsername}</td>
+                            <OverlayTrigger
+                                placement="top"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltipDownload}>
+                                <td className="text-center">
+                                    {file.downloadable &&
+                                        <FaDownload
+                                            onClick={() => onDownloadHandler(file)}>
+                                        </FaDownload>
+                                    }
+                                </td>
+                            </OverlayTrigger>
+                        </tr>)}
+                    </tbody>
+                </Table>
+            </div>
             {selectedFileId != 0 &&
                 <FileItemModal lgShow={lgShow} setLgShow={setLgShow} id={selectedFileId}></FileItemModal>}
-        </Card>
+        </Row>
     );
 }
 

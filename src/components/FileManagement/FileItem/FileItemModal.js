@@ -7,7 +7,7 @@ import classes from './FileItemModal.module.css';
 const FileItem = (props) => {
     const newCommentInputRef = useRef();
     const [file, setFile] = useState();
-    const [error, setError] = useState();
+    const [error, setError] = useState('');
 
     const authCtx = useContext(AuthContext);
 
@@ -36,7 +36,7 @@ const FileItem = (props) => {
         const comment = newCommentInputRef.current.value;
 
         if (!comment) {
-            setError('insert comment!');
+            setError('Write a comment!');
             return;
         }
 
@@ -77,7 +77,11 @@ const FileItem = (props) => {
         });
     };
 
-    let comments = <ListGroup.Item>No comments for the selected file. Add the first one!</ListGroup.Item>;
+    let comments = <ListGroup.Item>
+        <div className="ms-2 me-auto">
+            <div>No comments for the selected file. Add the first one!</div>
+        </div>
+    </ListGroup.Item>;
     if (file && file.comments.length > 0) {
         comments = file.comments.map((comment, index) =>
             <ListGroup.Item
@@ -120,8 +124,8 @@ const FileItem = (props) => {
                         </Col>
                     </Row>
                     {error && <Row>
-                        <div className="text-danger my-3">
-                            {error ? error : null}
+                        <div className="text-danger my-3 ms-1 fw-bold">
+                            {error}
                         </div>
                     </Row>}
                 </Modal.Body>

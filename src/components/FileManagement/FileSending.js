@@ -1,5 +1,5 @@
 import { useState, useRef, useContext } from "react";
-import { Form, Button, Spinner, Card } from "react-bootstrap";
+import { Form, Button, Spinner, Card, Col, Row } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 
 import { AuthContext } from "../../store/auth-context";
@@ -68,45 +68,46 @@ const FileSending = () => {
     }
 
     return (
-        <Card bg='light' className="light shadow-sm w-75 mx-auto my-4">
-            <Card.Body>
-                <div>
-                    <h4>File Sending</h4>
-                </div>
-                <Card.Text className="text-justify">
-                    Send encrypted files to another users. File will be encrypted with
-                    the receiver public key. The receiver will be able to download it
-                    from the table located on the right. Files are decrypted on download.
-                </Card.Text>
-                <Form>
-                    <Form.Group controlId="formFile" className="mb-4">
+        <Card.Body className="shadow-sm">
+            <div>
+                <h4>File Sending</h4>
+            </div>
+            <Card.Text className="text-justify">
+                Send encrypted files to another users. File will be encrypted with
+                the receiver public key. The receiver will be able to download it
+                from the table below. Files are decrypted on download.
+            </Card.Text>
+            <Form>
+                <Row className="mb-3">
+                    <Form.Group as={Col} controlId="formFile">
                         <Form.Label>Place receiver username</Form.Label>
                         <Form.Control type="text" placeholder="Username" ref={receiverInputRef} />
                     </Form.Group>
-                    <Form.Group controlId="formFile" className="mb-4">
+                    <Form.Group as={Col} controlId="formFile">
                         <Form.Label>Place your file here</Form.Label>
                         <Form.Control type="file" accept=".txt,.doc,.pdf" onChange={onChangeFile} />
                     </Form.Group>
-                    <Form.Group controlId="formFile">
-                        <Button className="me-3" variant="primary" onClick={onSendHandler}>
-                            <FaDownload className="mb-1"></FaDownload> Send
-                        </Button>
-                        {isLoading &&
-                            <div className="mt-3">
-                                <Spinner animation="border" role="status">
-                                    <span className="visually-hidden">Loading...</span>
-                                </Spinner>
-                            </div>}
-                        <div className="text-danger my-3">
-                            {error ? error : null}
-                        </div>
-                        <div className="text-success my-3">
-                            {message ? message : null}
-                        </div>
-                    </Form.Group>
-                </Form>
-            </Card.Body>
-        </Card>);
+                </Row>
+
+                <Form.Group controlId="formFile">
+                    <Button className="" variant="primary" onClick={onSendHandler}>
+                        <FaDownload className="mb-1"></FaDownload> Send
+                    </Button>
+                    {isLoading &&
+                        <div className="mt-3">
+                            <Spinner animation="border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        </div>}
+                    {error && <div className="text-danger mt-3">
+                        {error}
+                    </div>}
+                    {message && <div className="text-success mt-3">
+                        {message}
+                    </div>}
+                </Form.Group>
+            </Form>
+        </Card.Body>);
 }
 
 export default FileSending;
