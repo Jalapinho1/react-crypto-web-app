@@ -1,13 +1,19 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Card, OverlayTrigger, Row, Spinner, Table, Tooltip } from "react-bootstrap";
 import { AuthContext } from "../../store/auth-context";
 
 import { FaDownload } from "react-icons/fa";
+import FileItemModal from './FileItem/FileItemModal';
+
+import classes from './FileList.module.css';
 
 const FileList = () => {
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState();
     const [error, setError] = useState();
+
+    const [selectedFileId, setSelectedFileId] = useState(0);
+    const [lgShow, setLgShow] = useState(false);
 
     const authCtx = useContext(AuthContext);
 
@@ -76,11 +82,22 @@ const FileList = () => {
         }
     }
 
-    const renderTooltip = (props) => (
+    const renderTooltipOpen = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            Open comments
+        </Tooltip>
+    );
+
+    const renderTooltipDownload = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             Download - file sent to you
         </Tooltip>
     );
+
+    const onFileItemOpenHandler = (file) => {
+        setSelectedFileId(file.id);
+        setLgShow(true);
+    }
 
     return (
         <Card bg='light' className="shadow-sm my-4">
@@ -106,12 +123,21 @@ const FileList = () => {
                             </thead>
                             <tbody>
                                 {files.map(file => <tr key={file.id}>
-                                    <td>{file.filename}</td>
+                                    <OverlayTrigger
+                                        placement="left"
+                                        delay={{ show: 200, hide: 200 }}
+                                        overlay={renderTooltipOpen}>
+                                        <td
+                                            className={classes.pointercursor}
+                                            onClick={() => onFileItemOpenHandler(file)}>
+                                            {file.filename}
+                                        </td>
+                                    </OverlayTrigger>
                                     <td>{file.senderUsername}</td>
                                     <OverlayTrigger
                                         placement="top"
                                         delay={{ show: 250, hide: 400 }}
-                                        overlay={renderTooltip}>
+                                        overlay={renderTooltipDownload}>
                                         <td className="text-center">
                                             {file.downloadable &&
                                                 <FaDownload
@@ -126,6 +152,8 @@ const FileList = () => {
                     </div>
                 </Row>
             </Card.Body>
+            {selectedFileId != 0 &&
+                <FileItemModal lgShow={lgShow} setLgShow={setLgShow} id={selectedFileId}></FileItemModal>}
         </Card>
     );
 }
