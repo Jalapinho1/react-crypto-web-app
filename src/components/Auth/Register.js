@@ -1,10 +1,9 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Card, Container, Form, Image, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../store/auth-context";
 
 import classes from "./Auth.module.css";
 import register from "../../assets/register.png";
@@ -19,8 +18,6 @@ const Register = () => {
 
     const history = useHistory();
 
-    const authCtx = useContext(AuthContext);
-
     const submitHandler = (event) => {
         event.preventDefault();
 
@@ -31,7 +28,7 @@ const Register = () => {
         const password = passwordInputRef.current.value;
         const passwordRepeat = passwordRepeatInputRef.current.value;
 
-        if (password != passwordRepeat) {
+        if (password !== passwordRepeat) {
             setError('Passwords do not match');
             setIsLoading(false);
             return;
@@ -84,7 +81,7 @@ const Register = () => {
                         <div className="text-center mx-auto" >
                             <Image className={classes.logo} src={register} rounded />
                         </div>
-                        <h1 class="h3 my-4 text-center">Please register</h1>
+                        <h1 className="h3 my-4 text-center">Please register</h1>
                         <Form.Group controlId="formBasicUsername" className="mb-3">
                             <Form.Control type="text" placeholder="Username" ref={usernameInputRef} />
                         </Form.Group>
@@ -99,7 +96,7 @@ const Register = () => {
                                 onChange={() => togglePasswordVisibility()} />
                         </Form.Group>
                         <Form.Group>
-                            <Button className="mr-3 w-100" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
+                            <Button className="mb-2 w-100" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
                                 Register
                             </Button>
                             {isLoading ?

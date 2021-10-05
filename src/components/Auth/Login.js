@@ -89,7 +89,7 @@ const Login = () => {
                                 src={lock2}
                                 rounded />
                         </div>
-                        <h1 class="h3 my-4 text-center">Please login</h1>
+                        <h1 className="h3 my-4 text-center">Please login</h1>
                         <Form.Group controlId="formBasicUsername" className="mb-3">
                             <Form.Control type="text" placeholder="Username" ref={usernameInputRef} />
                         </Form.Group>
