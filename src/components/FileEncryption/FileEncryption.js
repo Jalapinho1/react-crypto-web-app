@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Form, Button, Container, Card, Spinner } from "react-bootstrap";
+import { Form, Button, Container, Card, Spinner, Row, Col } from "react-bootstrap";
 import { AuthContext } from "../../store/auth-context";
 import { KeyContext } from "../../store/key-management-context";
 
@@ -126,7 +126,15 @@ const FileEncryption = () => {
 
     return (
         <Container className="mt-3">
-            <Card bg='light' className="shadow-sm light w-75 mx-auto mt-4">
+            <Row>
+                <Col className="text-center" as="h4">
+                    <p className="shadow-sm bg-primary text-white py-3 rounded" >
+                        File Cryptography (Encrypt & Decrypt)
+                    </p>
+                </Col>
+            </Row>
+            <hr className="mt-0" />
+            <Card bg='light' className="shadow-sm mt-4">
                 <Card.Body>
                     <div>
                         <h4>File Encryption & Decryption</h4>

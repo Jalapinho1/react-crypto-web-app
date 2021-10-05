@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Fragment, useContext, useEffect, useState } from "react";
+import { Button, Card, CardGroup, Col, Container, Row, Spinner } from "react-bootstrap";
 import { AuthContext } from "../../store/auth-context";
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -71,58 +71,67 @@ const KeyManagement = () => {
         });
     }
 
-    let buttons;
-    let keyContent;
+    let content;
     if (keyCtx.publicKey && keyCtx.privateKey) {
-        keyContent = <Row>
-            <Col className="text-break">
-                {keyCtx.publicKey}
-            </Col>
-            <Col className="text-break">
-                {keyCtx.privateKey}
-            </Col>
-        </Row>;
-        buttons = <Row className="mb-3">
-            <Col xs={6}>
-                <CopyToClipboard
-                    // onCopy={this.onCopyPublicKey}
-                    options={{ message: 'Whoa!' }}
-                    text={keyCtx.publicKey}>
-                    <Button>Copy Public Key To Clipboard </Button>
-                </CopyToClipboard>
-            </Col>
-            <Col>
-                <CopyToClipboard
-                    // onCopy={this.onCopyPrivateKey}
-                    options={{ message: 'Whoa!' }}
-                    text={keyCtx.privateKey}>
-                    <Button>Copy Private Key To Clipboard</Button>
-                </CopyToClipboard>
-            </Col>
-        </Row >
+        content = <CardGroup className="mt-4">
+            <Card>
+                <Card.Header as="h5">Public key</Card.Header>
+                <Card.Body>
+                    <Card.Text>
+                        {keyCtx.publicKey}
+                    </Card.Text>
+                </Card.Body>
+                <Card.Footer className="text-muted">
+                    <CopyToClipboard
+                        options={{ message: 'Whoa!' }}
+                        text={keyCtx.publicKey}>
+                        <Button>Copy Public Key To Clipboard </Button>
+                    </CopyToClipboard>
+                </Card.Footer>
+            </Card>
+            <Card>
+                <Card.Header as="h5">Private key</Card.Header>
+                <Card.Body>
+                    <Card.Text>
+                        {keyCtx.privateKey}
+                    </Card.Text>
+                </Card.Body>
+                <Card.Footer className="text-muted">
+                    <CopyToClipboard
+                        options={{ message: 'Whoa!' }}
+                        text={keyCtx.privateKey}>
+                        <Button>Copy Private Key To Clipboard</Button>
+                    </CopyToClipboard>
+                </Card.Footer>
+            </Card>
+        </CardGroup>;
     } else if (!isLoading) {
-        keyContent = <Row>
-            <Col className="text-break">
-                <p>No public key available!</p>
-            </Col>
-            <Col className="text-break">
-                <p>No public key available!</p>
-            </Col>
-        </Row>;
-        buttons = <Row>
-            <Col>
-                <Button variant="primary" onClick={onGenerateKeysHandler}>
-                    Generate keys
-                </Button>
-            </Col>
-        </Row>;
+        content = <Fragment>
+            <Row>
+                <Col className="fw-bold">
+                    <p>No public key available!</p>
+                </Col>
+                <Col className="fw-bold">
+                    <p>No private key available!</p>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Button variant="primary" onClick={onGenerateKeysHandler}>
+                        Generate keys
+                    </Button>
+                </Col>
+            </Row>
+        </Fragment>;
     }
 
     return (
         <Container className="mt-3">
             <Row>
-                <Col className="fw-bold">
-                    <p>Here you have access to your keys</p>
+                <Col className="text-center " as="h4">
+                    <p className="shadow-sm bg-primary text-white py-3 rounded" >
+                        Here you have access to your keys
+                    </p>
                     {isLoading &&
                         <div className="mb-3">
                             <Spinner animation="border" role="status">
@@ -131,20 +140,12 @@ const KeyManagement = () => {
                         </div>}
                 </Col>
             </Row>
-            <Row>
-                <Col className="fw-bold">
-                    <p>Public key</p>
-                </Col>
-                <Col className="fw-bold">
-                    <p>Private key</p>
-                </Col>
-            </Row>
-            {keyContent}
-            {buttons}
-            <div className="text-danger my-3">
-                {error ? error : null}
-            </div>
-        </Container>
+            <hr className="mt-0" />
+            {content}
+            {error && <div className="text-danger my-3">
+                {error}
+            </div>}
+        </Container >
     );
 }
 

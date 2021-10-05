@@ -100,7 +100,7 @@ const FileList = () => {
     }
 
     return (
-        <Row>
+        <Row className="mt-3">
             {isLoading &&
                 <div>
                     <Spinner animation="border" role="status">
@@ -108,7 +108,7 @@ const FileList = () => {
                     </Spinner>
                 </div>}
             <div>
-                <Table className={classes.tableLong + " shadow-sm bg-white mt-3"} bordered hover>
+                <Table className={classes.tableLong + " shadow-sm bg-white mt-1"} bordered hover>
                     <thead>
                         <tr>
                             <th>File name</th>
