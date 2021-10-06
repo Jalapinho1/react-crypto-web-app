@@ -38,6 +38,11 @@ const MainNavigation = () => {
                             </LinkContainer>
                         }
                         {isLoggedIn &&
+                            <LinkContainer to="/home" exact={true}>
+                                <Nav.Link>Home</Nav.Link>
+                            </LinkContainer>
+                        }
+                        {isLoggedIn &&
                             <LinkContainer to="/keys" exact={true}>
                                 <Nav.Link>Key management</Nav.Link>
                             </LinkContainer>

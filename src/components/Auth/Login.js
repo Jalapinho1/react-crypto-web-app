@@ -9,12 +9,13 @@ import { AuthContext } from "../../store/auth-context";
 import { KeyContext } from "../../store/key-management-context";
 
 import classes from "./Auth.module.css";
-import lock2 from "../../assets/icon.png";
+import lock2 from "../../assets/authIlustrYellow.svg";
 
 const Login = () => {
     const usernameInputRef = useRef();
     const passwordInputRef = useRef();
     const [isPasswordShown, setIsPasswordShown] = useState(false);
+    const [imageDidLoad, setImageDidLoad] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
 
@@ -64,7 +65,7 @@ const Login = () => {
             authCtx.login(usernameInputRef.current.value, accessToken, "", expirationDate.toString());
 
             keyCtx.removeKeys();
-            history.push("/keys");
+            history.push("/home");
         }).catch(err => {
             console.log('Error!');
             err.json().then((body) => {
@@ -78,22 +79,34 @@ const Login = () => {
         setIsPasswordShown((prevState) => !prevState);
     }
 
+    const onLoad = () => {
+        setImageDidLoad(true);
+    }
+
+    let imageClasses;
+    if (imageDidLoad) {
+        imageClasses = classes.fadeIn + " " + classes.imageHome + " " + classes.logo;
+    } else {
+        imageClasses = classes.imageHome + " " + classes.logo;
+    }
+
     return (
         <Container>
-            <Card bg='light' className="light w-50 mx-auto mt-5">
+            <Card bg='light' className="shadow-sm light w-50 mx-auto mt-5">
                 <Card.Body>
                     <Form className={classes.formSignin}>
                         <div className="text-center mx-auto" >
                             <Image
-                                className={classes.logo}
+                                className={imageClasses}
                                 src={lock2}
+                                onLoad={onLoad}
                                 rounded />
                         </div>
                         <h1 className="h3 my-4 text-center">Please login</h1>
-                        <Form.Group controlId="formBasicUsername" className="mb-3">
+                        <Form.Group controlId="formBasicUsername" className="mb-3 shadow-sm">
                             <Form.Control type="text" placeholder="Username" ref={usernameInputRef} />
                         </Form.Group>
-                        <Form.Group controlId="formBasicPassword" className="mb-3">
+                        <Form.Group controlId="formBasicPassword" className="mb-3 shadow-sm">
                             <Form.Control type={isPasswordShown ? "text" : "password"} placeholder="Password" ref={passwordInputRef} />
                         </Form.Group>
                         <Form.Group controlId="formBasicCheckbox" className="mb-3">
@@ -101,7 +114,7 @@ const Login = () => {
                                 onChange={() => togglePasswordVisibility()} />
                         </Form.Group>
                         <Form.Group>
-                            <Button className="mb-2 w-100" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
+                            <Button className="mb-2 w-100 shadow" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
                                 Login
                             </Button>
                             {isLoading ?
@@ -120,7 +133,7 @@ const Login = () => {
                                 <span className="me-2">
                                     Dont have an account yet?
                                 </span>
-                                <Link className='btn btn-success px-3 mx-auto' to={`/register`}>
+                                <Link className='btn btn-warning px-3 mx-auto shadow-sm' to={`/register`}>
                                     Register
                                 </Link>
                             </div>

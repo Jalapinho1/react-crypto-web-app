@@ -6,13 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 
 import classes from "./Auth.module.css";
-import register from "../../assets/register.png";
+import register from "../../assets/securityIlustrYellow.svg";
 
 const Register = () => {
     const usernameInputRef = useRef();
     const passwordInputRef = useRef();
     const passwordRepeatInputRef = useRef();
     const [isPasswordShown, setIsPasswordShown] = useState(false);
+    const [imageDidLoad, setImageDidLoad] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -73,22 +74,38 @@ const Register = () => {
         setIsPasswordShown((prevState) => !prevState);
     }
 
+    const onLoad = () => {
+        setImageDidLoad(true);
+    }
+
+    let imageClasses;
+    if (imageDidLoad) {
+        imageClasses = classes.fadeIn + " " + classes.imageHome + " " + classes.logo2;
+    } else {
+        imageClasses = classes.imageHome + " " + classes.logo2;
+    }
+
     return (
         <Container>
-            <Card bg='light' className="light w-50 mx-auto mt-5">
+            <Card bg='light' className="shadow-sm light w-50 mx-auto mt-5">
                 <Card.Body>
                     <Form className={classes.formSignin}>
                         <div className="text-center mx-auto" >
-                            <Image className={classes.logo} src={register} rounded />
+                            <Image
+                                className={imageClasses}
+                                src={register} 
+                                onLoad={onLoad}
+                                rounded
+                            />
                         </div>
                         <h1 className="h3 my-4 text-center">Please register</h1>
-                        <Form.Group controlId="formBasicUsername" className="mb-3">
+                        <Form.Group controlId="formBasicUsername" className="mb-3 shadow-sm">
                             <Form.Control type="text" placeholder="Username" ref={usernameInputRef} />
                         </Form.Group>
-                        <Form.Group controlId="formBasicPassword" className="mb-3">
+                        <Form.Group controlId="formBasicPassword" className="mb-3 shadow-sm">
                             <Form.Control type={isPasswordShown ? "text" : "password"} placeholder="Password" ref={passwordInputRef} />
                         </Form.Group>
-                        <Form.Group controlId="formBasicPassword" className="mb-3">
+                        <Form.Group controlId="formBasicPassword" className="mb-3 shadow-sm">
                             <Form.Control type={isPasswordShown ? "text" : "password"} placeholder="Repeat Password" ref={passwordRepeatInputRef} />
                         </Form.Group>
                         <Form.Group controlId="formBasicCheckbox" className="mb-3">
@@ -96,7 +113,7 @@ const Register = () => {
                                 onChange={() => togglePasswordVisibility()} />
                         </Form.Group>
                         <Form.Group>
-                            <Button className="mb-2 w-100" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
+                            <Button className="mb-2 w-100 shadow" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
                                 Register
                             </Button>
                             {isLoading ?
@@ -115,7 +132,7 @@ const Register = () => {
                                 <span className="me-2">
                                     Already have an account?
                                 </span>
-                                <Link className='btn btn-success px-3 mx-auto' to={`/login`}>
+                                <Link className='btn btn-warning px-3 mx-auto shadow-sm' to={`/login`}>
                                     Login
                                 </Link>
                             </div>

@@ -8,6 +8,7 @@ import KeyManagementPage from './pages/KeyManagementPage';
 import CryptoPage from './pages/CryptoPage';
 import { AuthContext } from './store/auth-context';
 import FileManagementPage from './pages/FileManagementPage';
+import HomePage from './pages/HomePage';
 
 function App() {
 
@@ -27,6 +28,11 @@ function App() {
           {!isLoggedIn &&
             <Route path='/register' exact>
               <RegistrationPage></RegistrationPage>
+            </Route>
+          }
+          {isLoggedIn &&
+            <Route path='/home' exact>
+              <HomePage></HomePage>
             </Route>
           }
           {isLoggedIn &&

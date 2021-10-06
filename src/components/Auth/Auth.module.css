@@ -5,6 +5,27 @@
     margin: auto;
 }
 
-.logo{
-    width: 150px;
+.logo {
+    width: 290px;
+}
+
+.logo2 {
+    width: 290px;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.imageHome {
+    opacity: 0;
+}
+
+.fadeIn {
+    animation: fadein 0.5s ease forwards;
 }
