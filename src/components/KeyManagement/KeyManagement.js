@@ -165,20 +165,6 @@ const KeyManagement = () => {
 
     return (
         <Container className="mt-3">
-            {/* <Row>
-                <Col className="text-center " as="h4">
-                    <p className="shadow-sm bg-primary text-white py-3 rounded" >
-                        Here you have access to your keys
-                    </p>
-                    {isLoading &&
-                        <div className="mb-3">
-                            <Spinner animation="border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner>
-                        </div>}
-                </Col>
-            </Row>
-            <hr className="mt-0" /> */}
             {content}
             {isLoading &&
                 <div className="text-center my-3">
