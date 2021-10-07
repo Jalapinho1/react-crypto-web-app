@@ -1,0 +1,23 @@
+.keyDiv{
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.keyLogo{
+    border-radius: 30px;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.imageHome {
+  opacity: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fadeIn {
+  animation: fadein 0.5s ease forwards;
+}

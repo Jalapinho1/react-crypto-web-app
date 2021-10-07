@@ -1,17 +1,25 @@
 import { Fragment, useContext, useEffect, useState } from "react";
-import { Button, Card, CardGroup, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Button, Card, CardGroup, Container, Figure, Spinner } from "react-bootstrap";
 import { AuthContext } from "../../store/auth-context";
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { KeyContext } from "../../store/key-management-context";
 
+import key from "../../assets/keyYellow.png";
+import empty from "../../assets/emptyNotes.svg";
+import classes from "./KeyManagement.module.css";
 
 const KeyManagement = () => {
+    const [imageDidLoad, setImageDidLoad] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
     const authCtx = useContext(AuthContext);
     const keyCtx = useContext(KeyContext);
+
+    const onLoad = () => {
+        setImageDidLoad(true);
+    }
 
     useEffect(() => {
         if (!keyCtx.publicKey && !keyCtx.privateKey) {
@@ -73,11 +81,24 @@ const KeyManagement = () => {
 
     let content;
     if (keyCtx.publicKey && keyCtx.privateKey) {
-        content = <CardGroup className="mt-4">
+        content = <CardGroup className="my-4 shadow-sm">
             <Card>
-                <Card.Header as="h5">Public key</Card.Header>
+                <Card.Header as="h5" className="text-center">
+                    <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
+                        <Figure.Image
+                            className="shadow-sm"
+                            width={230}
+                            height={230}
+                            alt="171x180"
+                            src={key}
+                            onLoad={onLoad}
+                            roundedCircle
+                        />
+                    </Figure>
+                    <Card.Title className="text-center">Public key</Card.Title>
+                </Card.Header>
                 <Card.Body>
-                    <Card.Text>
+                    <Card.Text className={classes.keyDiv}>
                         {keyCtx.publicKey}
                     </Card.Text>
                 </Card.Body>
@@ -90,8 +111,21 @@ const KeyManagement = () => {
                 </Card.Footer>
             </Card>
             <Card>
-                <Card.Header as="h5">Private key</Card.Header>
-                <Card.Body>
+                <Card.Header as="h5" className="text-center">
+                    <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
+                        <Figure.Image
+                            className="shadow-sm"
+                            width={230}
+                            height={230}
+                            alt="171x180"
+                            src={key}
+                            onLoad={onLoad}
+                            roundedCircle
+                        />
+                    </Figure>
+                    <Card.Title className="text-center">Private key</Card.Title>
+                </Card.Header>
+                <Card.Body className={classes.keyDiv}>
                     <Card.Text>
                         {keyCtx.privateKey}
                     </Card.Text>
@@ -105,29 +139,33 @@ const KeyManagement = () => {
                 </Card.Footer>
             </Card>
         </CardGroup>;
-    } else if (!isLoading) {
+    } else {
         content = <Fragment>
-            <Row>
-                <Col className="fw-bold">
-                    <p>No public key available!</p>
-                </Col>
-                <Col className="fw-bold">
-                    <p>No private key available!</p>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <Button variant="primary" onClick={onGenerateKeysHandler}>
-                        Generate keys
-                    </Button>
-                </Col>
-            </Row>
-        </Fragment>;
+            <div className="fw-bold text-center mx-auto">
+                <h2>No keys available!</h2>
+            </div>
+            <div className="text-center mx-auto my-4">
+                <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
+                    <Figure.Image
+                        width={250}
+                        height={250}
+                        alt="171x180"
+                        src={empty}
+                        onLoad={onLoad}
+                    />
+                </Figure>
+            </div>
+            <div className="text-center mx-auto">
+                <Button variant="primary" size="lg" onClick={onGenerateKeysHandler}>
+                    Generate keys
+                </Button>
+            </div>
+        </Fragment >;
     }
 
     return (
         <Container className="mt-3">
-            <Row>
+            {/* <Row>
                 <Col className="text-center " as="h4">
                     <p className="shadow-sm bg-primary text-white py-3 rounded" >
                         Here you have access to your keys
@@ -140,8 +178,14 @@ const KeyManagement = () => {
                         </div>}
                 </Col>
             </Row>
-            <hr className="mt-0" />
+            <hr className="mt-0" /> */}
             {content}
+            {isLoading &&
+                <div className="text-center my-3">
+                    <Spinner animation="border" role="status" variant="warning">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>}
             {error && <div className="text-danger my-3">
                 {error}
             </div>}
