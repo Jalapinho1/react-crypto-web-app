@@ -28,7 +28,7 @@ const FileEncryption = () => {
             return;
         }
         if (!keyCtx.publicKey) {
-            setError('Missing public key');
+            setError('Missing public key! Please generate one in Key management page.');
             setIsLoading(false);
             return;
         }
@@ -82,7 +82,7 @@ const FileEncryption = () => {
             return;
         }
         if (!keyCtx.publicKey) {
-            setError('Missing public key');
+            setError('Missing public key! Please generate one in Key management page.');
             setIsLoading(false);
             return;
         }

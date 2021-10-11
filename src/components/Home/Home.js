@@ -22,7 +22,7 @@ const Home = () => {
             <Row className="g-0 bg-primary text-center shadow-sm d-flex justify-content-center">
                 <Col md="auto" className="d-flex align-items-center">
                     <h1 className="text-white fw-bold">
-                        Cryptography <br/> Web App
+                        Cryptography <br /> Web App
                     </h1>
                 </Col>
                 <Col md="auto" className="pt-1">
@@ -42,28 +42,6 @@ const Home = () => {
                     <Col>
                         <Card className="shadow">
                             <Card.Body>
-                                <div className="text-center my-3">
-                                    <Figure>
-                                        <Figure.Image
-                                            width={300}
-                                            height={180}
-                                            alt="171x180"
-                                            src={keysImg}
-                                        />
-                                    </Figure>
-                                </div>
-                                <Card.Title>Generate a key pair</Card.Title>
-                                <Card.Text>
-                                    Generate public-private key pair. These keys can
-                                    be later used for data encryption. They have a universal
-                                    use, so you can copy them for use outside this application.
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <Card className="shadow">
-                            <Card.Body>
                                 <div className="text-center my-2">
                                     <Figure>
                                         <Figure.Image
@@ -78,10 +56,12 @@ const Home = () => {
                                     Encrypt/Decrypt files for yourself
                                 </Card.Title>
                                 <Card.Text>
-                                    Encrypt and decrypt files in seconds with the RSA alghoritm,
-                                    which is used as a world standard for encryption.
-                                    They will be downloaded afterwards. You can encrypt multiple
-                                    types of files (.txt, .doc, .pdf).
+                                    Encrypt and decrypt files in seconds with combination
+                                    of AES and RSA alghoritms, which are being used by many
+                                    modern communication environments, including the internet.
+                                    The alghoritms uses the RSA public - private key pair with
+                                    the AES secret key.
+                                    You can encrypt multiple types of files (.txt, .doc, .pdf).
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -101,9 +81,32 @@ const Home = () => {
                                 </div>
                                 <Card.Title>Send & Comment files</Card.Title>
                                 <Card.Text>
-                                    Share files with your friends. They will be encrypted with the
-                                    receivers private key, so he will be the only one who is able
+                                    Share files with your friends. Receivers public key will be used
+                                    in the encryption process, so he will be the only one who is able
                                     to decrypt it.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className="shadow">
+                            <Card.Body>
+                                <div className="text-center my-3">
+                                    <Figure>
+                                        <Figure.Image
+                                            width={300}
+                                            height={180}
+                                            alt="171x180"
+                                            src={keysImg}
+                                        />
+                                    </Figure>
+                                </div>
+                                <Card.Title>Generate a key pair</Card.Title>
+                                <Card.Text>
+                                    Generate public-private key pair for RSA encryption.
+                                    These keys can be later used for data encryption.
+                                    They have a universal use, so you can copy them
+                                    for use outside this application.
                                 </Card.Text>
                             </Card.Body>
                         </Card>
