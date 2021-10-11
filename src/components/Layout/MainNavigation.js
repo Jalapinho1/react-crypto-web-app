@@ -49,12 +49,12 @@ const MainNavigation = () => {
                         }
                         {isLoggedIn &&
                             <LinkContainer to="/crypto" exact={true}>
-                                <Nav.Link>File encryption</Nav.Link>
+                                <Nav.Link>Local encryption</Nav.Link>
                             </LinkContainer>
                         }
                         {isLoggedIn &&
-                            <LinkContainer to="/files" exact={true}>
-                                <Nav.Link>File management</Nav.Link>
+                            <LinkContainer to="/files">
+                                <Nav.Link>File sharing</Nav.Link>
                             </LinkContainer>
                         }
                     </Nav>

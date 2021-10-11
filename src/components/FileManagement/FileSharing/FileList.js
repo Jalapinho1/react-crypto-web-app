@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { OverlayTrigger, Row, Spinner, Table, Tooltip } from "react-bootstrap";
-import { AuthContext } from "../../store/auth-context";
+import { AuthContext } from "../../../store/auth-context";
 
 import { FaDownload } from "react-icons/fa";
-import FileItemModal from './FileItem/FileItemModal';
+import FileItemModal from '../FileItem/FileItemModal';
 
 import classes from './FileList.module.css';
 
-const FileList = () => {
+const FileList = (props) => {
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState();
     const [error, setError] = useState();
@@ -43,7 +43,7 @@ const FileList = () => {
                 setIsLoading(false);
             });
         });
-    }, []);
+    }, [props.wasFileSent]);
 
     const onDownloadHandler = async (fileData) => {
         setError('');
@@ -102,7 +102,7 @@ const FileList = () => {
     return (
         <Row className="mt-3">
             {isLoading &&
-                <div>
+                <div className="text-center">
                     <Spinner animation="border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>

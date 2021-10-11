@@ -101,7 +101,7 @@ const FileItem = (props) => {
     return (
         <>
             <Modal
-                size="md"
+                size="lg"
                 show={props.lgShow}
                 onHide={() => props.setLgShow(false)}
                 aria-labelledby="example-modal-sizes-title-lg"
@@ -111,7 +111,15 @@ const FileItem = (props) => {
                         File Comments
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="pt-0">
+                    <Row className="py-3 my-2 fw-bold bg-light">
+                        <Col md>
+                            <span>File name: {file && file.filename}</span>
+                        </Col>
+                        <Col md>
+                            <span className="mb-0 ">Sender username: {file && file.senderUsername}</span>
+                        </Col>
+                    </Row>
                     <ListGroup className={classes.comments} as="ol" numbered="true">
                         {comments}
                     </ListGroup>

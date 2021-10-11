@@ -5,9 +5,9 @@ import Layout from './components/Layout/Layout';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import KeyManagementPage from './pages/KeyManagementPage';
-import CryptoPage from './pages/CryptoPage';
+import LocalCryptoPage from './pages/LocalCryptoPage';
 import { AuthContext } from './store/auth-context';
-import FileManagementPage from './pages/FileManagementPage';
+import FileSharingPage from './pages/FileSharingPage';
 import HomePage from './pages/HomePage';
 
 function App() {
@@ -41,13 +41,13 @@ function App() {
             </Route>
           }
           {isLoggedIn &&
-            <Route path='/crypto' exact>
-              <CryptoPage></CryptoPage>
+            <Route path='/files' exact>
+              <FileSharingPage></FileSharingPage>
             </Route>
           }
           {isLoggedIn &&
-            <Route path='/files' exact>
-              <FileManagementPage></FileManagementPage>
+            <Route path='/crypto' exact>
+              <LocalCryptoPage></LocalCryptoPage>
             </Route>
           }
           {!isLoggedIn &&

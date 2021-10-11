@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
-import { Form, Button, Container, Card, Spinner, Row, Col } from "react-bootstrap";
-import { AuthContext } from "../../store/auth-context";
-import { KeyContext } from "../../store/key-management-context";
+import { Form, Button, Container, Card, Spinner, Row, Col, Breadcrumb } from "react-bootstrap";
+import { AuthContext } from "../../../store/auth-context";
+import { KeyContext } from "../../../store/key-management-context";
 
 import { FaDownload } from "react-icons/fa";
+import cryptoImg from '../../../assets/downloadImg.svg';
 
 const FileEncryption = () => {
     const [file, setFile] = useState([]);
@@ -126,16 +127,16 @@ const FileEncryption = () => {
 
     return (
         <Container className="mt-3">
-            <Row>
-                <Col className="text-center" as="h4">
-                    <p className="shadow-sm bg-primary text-white py-3 rounded" >
-                        File Cryptography (Encrypt & Decrypt)
-                    </p>
-                </Col>
-            </Row>
-            <hr className="mt-0" />
-            <Card bg='light' className="shadow-sm mt-4">
-                <Card.Body>
+            <Card className="shadow-sm mt-4">
+                <div className="bg-light py-3 shadow-sm">
+                    <Card.Img
+                        variant="top"
+                        src={cryptoImg}
+                        width={250}
+                        height={250}
+                    />
+                </div>
+                <Card.Body className='p-4'>
                     <div>
                         <h4>File Encryption & Decryption</h4>
                     </div>
@@ -170,7 +171,6 @@ const FileEncryption = () => {
                     </Form>
                 </Card.Body>
             </Card>
-
         </Container >
     );
 }
