@@ -152,10 +152,10 @@ const FileEncryption = () => {
                             <Form.Control type="file" accept=".txt,.doc,.pdf" onChange={onChangeFile} />
                         </Form.Group>
                         <Form.Group controlId="formFile">
-                            <Button className="me-3" variant="primary" onClick={encryptionHandler}>
+                            <Button className="me-3 shadow-sm" variant="primary" onClick={encryptionHandler}>
                                 <FaDownload className="mb-1"></FaDownload> Encrypt
                             </Button>
-                            <Button variant="primary" onClick={decryptionHandler}>
+                            <Button className="shadow-sm" variant="primary" onClick={decryptionHandler}>
                                 <FaDownload className="mb-1"></FaDownload> Decrypt
                             </Button>
                             {isLoading &&

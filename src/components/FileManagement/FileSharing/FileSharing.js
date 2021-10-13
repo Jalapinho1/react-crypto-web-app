@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
-import { Container, Card, Button, useAccordionButton, AccordionContext } from "react-bootstrap";
-import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
+import { useState } from "react";
+import { Container, Card, Button } from "react-bootstrap";
+import { FaDownload } from "react-icons/fa";
 import FileList from "./FileList";
 import FileSending from "./FileSending";
 import msgImg from '../../../assets/msgImg.svg';
@@ -35,7 +35,7 @@ const FileSharing = () => {
                     <Card.Text>
                         Share files with your friends.
                     </Card.Text>
-                    <Button onClick={onFileSendHandler}>
+                    <Button onClick={onFileSendHandler} className="shadow-sm">
                         <FaDownload className="mb-1"></FaDownload> Send file
                     </Button>
                     <FileList wasFileSent={wasFileSent}></FileList>
