@@ -24,7 +24,6 @@ const KeyManagement = () => {
     useEffect(() => {
         if (!keyCtx.publicKey && !keyCtx.privateKey) {
             setIsLoading(true);
-
             fetch(`http://localhost:8080/api/getkeys`,
                 {
                     method: 'GET',
@@ -39,7 +38,7 @@ const KeyManagement = () => {
                     throw res;
                 }
             }).then(data => {
-                if (data.publicK && data.privateK) {
+                if (data && data.publicK && data.privateK) {
                     keyCtx.storeKeys(data.publicK, data.privateK);
                 }
                 setIsLoading(false);
@@ -50,7 +49,14 @@ const KeyManagement = () => {
                 });
             });
         }
-    }, [authCtx.accessToken, keyCtx]);
+    }, [authCtx.accessToken, keyCtx.publicKey, keyCtx.privateKey, keyCtx.storeKeys]);
+
+    useEffect(() => {
+        return () => {
+            console.log("cleaned up");
+            setIsLoading(false);
+        };
+    }, []);
 
     const onGenerateKeysHandler = () => {
         setIsLoading(true);
