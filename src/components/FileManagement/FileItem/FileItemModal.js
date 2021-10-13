@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Col, Form, ListGroup, Row, Button, Modal } from "react-bootstrap";
 import { AuthContext } from "../../../store/auth-context";
+import moment from 'moment';
 
 import classes from './FileItemModal.module.css';
 
@@ -40,7 +41,9 @@ const FileItem = (props) => {
             return;
         }
 
-        const commentData = { fileMetadataId: props.id, commentedBy: authCtx.username, content: comment };
+        const now = moment(new Date()).format("yyyy-MM-DD HH:mm:ss");
+
+        const commentData = { fileMetadataId: props.id, commentedBy: authCtx.username, content: comment, commentedAt: now };
 
         fetch(
             `http://localhost:8080/api/file/update-comments`,
@@ -89,8 +92,11 @@ const FileItem = (props) => {
                 as="li"
                 className="d-flex justify-content-between align-items-start"
             >
-                <div className="ms-2 me-auto">
-                    <div className="fw-bold">{comment.commentedBy}</div>
+                <div className="ms-2 me-auto w-100">
+                    <div>
+                        <span className="fw-bold">{comment.commentedBy}</span>
+                        <span className="float-end">{comment.commentedAt}</span>
+                    </div>
                     {comment.content}
                 </div>
                 {/* <Button variant="danger" size="sm" onClick={onCommentDeleteHandler}>
