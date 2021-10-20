@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 import classes from "./Auth.module.css";
 import register from "../../assets/securityIlustrYellow.svg";
+import useHttp from "../hooks/use-http";
 
 const Register = () => {
     const usernameInputRef = useRef();
@@ -14,16 +15,18 @@ const Register = () => {
     const passwordRepeatInputRef = useRef();
     const [isPasswordShown, setIsPasswordShown] = useState(false);
     const [imageDidLoad, setImageDidLoad] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+
+    const { isLoading, error, sendRequest: registerRequest, setIsLoading, setError } = useHttp();
 
     const history = useHistory();
 
+    const handleRegisterResponse = (data) => {
+        alert(data.message);
+        history.push("/login");
+    };
+
     const submitHandler = (event) => {
         event.preventDefault();
-
-        setIsLoading(true);
-        setError('');
 
         const username = usernameInputRef.current.value;
         const password = passwordInputRef.current.value;
@@ -40,34 +43,15 @@ const Register = () => {
             "password": password
         };
 
-        console.log(username);
-        console.log(password);
 
-        fetch(
-            `http://localhost:8080/api/auth/signup`,
-            {
-                method: 'POST',
-                body: JSON.stringify(userNameObject),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        ).then(res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw res;
-            }
-        }).then(res => {
-            alert(res.message);
-            history.push("/login");
-        }).catch(err => {
-            console.log('Error!');
-            err.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        });
+        registerRequest({
+            url: 'http://localhost:8080/api/auth/signup',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: userNameObject
+        }, handleRegisterResponse);
     }
 
     const togglePasswordVisibility = () => {
@@ -89,11 +73,11 @@ const Register = () => {
         <Container>
             <Card bg='light' className="shadow-sm light w-50 mx-auto mt-5">
                 <Card.Body>
-                    <Form className={classes.formSignin}>
+                    <Form className={classes.formSignin} onSubmit={submitHandler} autoComplete="off">
                         <div className="text-center mx-auto" >
                             <Image
                                 className={imageClasses}
-                                src={register} 
+                                src={register}
                                 onLoad={onLoad}
                                 rounded
                             />
@@ -113,7 +97,7 @@ const Register = () => {
                                 onChange={() => togglePasswordVisibility()} />
                         </Form.Group>
                         <Form.Group>
-                            <Button className="mb-2 w-100 shadow" variant="primary" type="submit" onClick={(event) => submitHandler(event)}>
+                            <Button className="mb-2 w-100 shadow" variant="primary" type="submit" >
                                 Register
                             </Button>
                             {isLoading ?

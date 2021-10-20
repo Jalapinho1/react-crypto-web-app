@@ -57,7 +57,7 @@ function App() {
           }
           {isLoggedIn &&
             <Route path='/*' exact>
-              <Redirect to='/keys'></Redirect>
+              <Redirect to='/home'></Redirect>
             </Route>
           }
         </Switch>

@@ -1,15 +1,15 @@
 import { useContext, useState } from "react";
-import { Form, Button, Container, Card, Spinner, Row, Col, Breadcrumb } from "react-bootstrap";
+import { Form, Button, Container, Card, Spinner } from "react-bootstrap";
 import { AuthContext } from "../../../store/auth-context";
 import { KeyContext } from "../../../store/key-management-context";
 
 import { FaDownload } from "react-icons/fa";
 import cryptoImg from '../../../assets/downloadImg.svg';
+import useHttp from "../../hooks/use-http";
 
 const FileEncryption = () => {
     const [file, setFile] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const { isLoading, error, sendRequest: localCryptographyRequest, setIsLoading, setError } = useHttp();
 
     const authCtx = useContext(AuthContext);
     const keyCtx = useContext(KeyContext);
@@ -18,10 +18,24 @@ const FileEncryption = () => {
         setFile(e.target.files[0]);
     };
 
-    const encryptionHandler = async () => {
-        setError('');
-        setIsLoading(true);
+    const handleEncryptResponse = (data, outputData) => {
+        let newFileName;
 
+        const oldFileName = file.name;
+        const alreadyProcessed = oldFileName.includes("Encrypted") || oldFileName.includes("Decrypted");
+        if (alreadyProcessed){
+            newFileName = outputData.outputFileName + ' ' + file.name.slice(9);
+        }else{
+            newFileName = outputData.outputFileName + ' ' + file.name;
+        }
+        const csvURL = window.URL.createObjectURL(data);
+        const tempLink = document.createElement('a');
+        tempLink.href = csvURL;
+        tempLink.setAttribute('download', newFileName);
+        tempLink.click();
+    };
+
+    const encryptionHandler = async () => {
         if (file.length === 0) {
             setError('Missing file');
             setIsLoading(false);
@@ -37,45 +51,21 @@ const FileEncryption = () => {
         formData.append("file", file, file.name);
         formData.append("publicKey", keyCtx.publicKey);
 
-        let response = await fetch(
-            `http://localhost:8080/api/encrypt`,
-            {
-                method: 'POST',
-                body: formData,
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + authCtx.accessToken,
-                    'Accept': 'application/json, text/plain, */*',
-                    responseType: 'blob'
-                })
-            }
-        );
-
-        if (response.ok) {
-            let fileType = response.headers.get('content-disposition');
-            fileType = fileType.substr(fileType.length - 5);
-            fileType = fileType.slice(0, -1);
-
-            let data = await response.blob();
-
-            const csvURL = window.URL.createObjectURL(data);
-            const tempLink = document.createElement('a');
-            tempLink.href = csvURL;
-            tempLink.setAttribute('download', 'encrypted' + fileType);
-            tempLink.click();
-            setIsLoading(false);
-        } else {
-            response.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        }
-
+        localCryptographyRequest({
+            url: 'http://localhost:8080/api/encrypt',
+            method: 'POST',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + authCtx.accessToken,
+                'Accept': 'application/json, text/plain, */*',
+                responseType: 'blob'
+            }),
+            body: formData,
+            isBlobOperation: true,
+            outputData: { outputFileName: 'Encrypted' }
+        }, handleEncryptResponse);
     }
 
     const decryptionHandler = async () => {
-        setError('');
-        setIsLoading(true);
-
         if (file.length === 0) {
             setError('Missing file');
             setIsLoading(false);
@@ -91,38 +81,18 @@ const FileEncryption = () => {
         formData.append("file", file, file.name);
         formData.append("privateKey", keyCtx.privateKey);
 
-        let response = await fetch(
-            `http://localhost:8080/api/decrypt`,
-            {
-                method: 'POST',
-                body: formData,
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + authCtx.accessToken,
-                    'Accept': 'application/json, text/plain, */*',
-                    responseType: 'blob'
-                })
-            }
-        );
-
-        if (response.ok) {
-            let fileType = response.headers.get('content-disposition');
-            fileType = fileType.substr(fileType.length - 5);
-            fileType = fileType.slice(0, -1);
-
-            let data = await response.blob();
-
-            const csvURL = window.URL.createObjectURL(data);
-            const tempLink = document.createElement('a');
-            tempLink.href = csvURL;
-            tempLink.setAttribute('download', 'decrypted' + fileType);
-            tempLink.click();
-            setIsLoading(false);
-        } else {
-            response.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        }
+        localCryptographyRequest({
+            url: 'http://localhost:8080/api/decrypt',
+            method: 'POST',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + authCtx.accessToken,
+                'Accept': 'application/json, text/plain, */*',
+                responseType: 'blob'
+            }),
+            body: formData,
+            isBlobOperation: true,
+            outputData: { outputFileName: 'Decrypted' }
+        }, handleEncryptResponse);
     }
 
     return (

@@ -10,25 +10,28 @@ import { KeyContext } from "../../store/key-management-context";
 
 import classes from "./Auth.module.css";
 import lock2 from "../../assets/authIlustrYellow.svg";
+import useHttp from "../hooks/use-http";
 
 const Login = () => {
     const usernameInputRef = useRef();
     const passwordInputRef = useRef();
     const [isPasswordShown, setIsPasswordShown] = useState(false);
-    const [imageDidLoad, setImageDidLoad] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false);
-
-    const history = useHistory();
+    const [imageDidLoad, setImageDidLoad] = useState(false);;
+    const { isLoading, error, sendRequest: loginRequest, setIsLoading, setError } = useHttp();
 
     const authCtx = useContext(AuthContext);
     const keyCtx = useContext(KeyContext);
 
+    const handleLoginResponse = (data) => {
+        const accessToken = data.accessToken;
+        const expirationDate = new Date(new Date().getTime() + 500 * 1000);
+
+        authCtx.login(usernameInputRef.current.value, accessToken, "", expirationDate.toString());
+        keyCtx.removeKeys();
+    };
+
     const submitHandler = (event) => {
         event.preventDefault();
-
-        setIsLoading(true);
-        setError('');
 
         const username = usernameInputRef.current.value;
         const password = passwordInputRef.current.value;
@@ -38,41 +41,14 @@ const Login = () => {
             "password": password
         };
 
-        console.log(username);
-        console.log(password);
-
-        fetch(
-            `http://localhost:8080/api/auth/signin`,
-            {
-                method: 'POST',
-                body: JSON.stringify(userNameObject),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        ).then(res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw res;
-            }
-        }).then(res => {
-            const accessToken = res.accessToken;
-            //const refreshToken = tokens.refresh_token;
-
-            const expirationDate = new Date(new Date().getTime() + 500 * 1000);
-
-            authCtx.login(usernameInputRef.current.value, accessToken, "", expirationDate.toString());
-
-            keyCtx.removeKeys();
-            history.push("/home");
-        }).catch(err => {
-            console.log('Error!');
-            err.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        });
+        loginRequest({
+            url: 'http://localhost:8080/api/auth/signin',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: userNameObject
+        }, handleLoginResponse);
     }
 
     const togglePasswordVisibility = () => {

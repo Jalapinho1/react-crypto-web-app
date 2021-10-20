@@ -6,80 +6,60 @@ import { FaDownload } from "react-icons/fa";
 import FileItemModal from '../FileItem/FileItemModal';
 
 import classes from './FileList.module.css';
+import useHttp from "../../hooks/use-http";
 
 const FileList = (props) => {
     const [files, setFiles] = useState([]);
-    const [isLoading, setIsLoading] = useState();
-    const [error, setError] = useState();
-
+    const [downloadedFile, setDownloadedFile] = useState();
     const [selectedFileId, setSelectedFileId] = useState(0);
     const [lgShow, setLgShow] = useState(false);
 
+    const { isLoading, sendRequest: getFilesRequest } = useHttp();
+
     const authCtx = useContext(AuthContext);
 
+    const handleFilesResponse = (data) => {
+        setFiles(data);
+    };
+
+    const handleDownloadResponse = (data) => {
+        const csvURL = window.URL.createObjectURL(data);
+        const tempLink = document.createElement('a');
+        tempLink.href = csvURL;
+        tempLink.setAttribute('download', downloadedFile.filename);
+        tempLink.click();
+        setDownloadedFile(null);
+    };
+
     useEffect(() => {
-        setIsLoading(true);
+        getFilesRequest({
+            url: `http://localhost:8080/api/file/getrestriced?username=` + authCtx.username,
+            headers: new Headers({
+                'Authorization': 'Bearer ' + authCtx.accessToken
+            })
+        }, handleFilesResponse);
+    }, [props.wasFileSent, authCtx.accessToken, authCtx.username, getFilesRequest]);
 
-        fetch(
-            `http://localhost:8080/api/file/getrestriced?username=` + authCtx.username,
-            {
-                method: 'GET',
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + authCtx.accessToken
-                })
-            }
-        ).then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw response;
-            }
-        }).then(response => {
-            setFiles(response);
-            setIsLoading(false);
-        }).catch(err => {
-            err.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        });
-    }, [props.wasFileSent]);
-
-    const onDownloadHandler = async (fileData) => {
-        setError('');
-        setIsLoading(true);
-
-        const formData = new FormData();
-        formData.append("file", fileData);
-
-        let response = await fetch(
-            `http://localhost:8080/api/file/download`,
-            {
+    useEffect(() => {
+        if (downloadedFile) {
+            getFilesRequest({
+                url: "http://localhost:8080/api/file/download",
                 method: 'POST',
-                body: JSON.stringify(fileData),
+                body: downloadedFile,
                 headers: new Headers({
                     'Authorization': 'Bearer ' + authCtx.accessToken,
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                })
-            }
-        );
-
-        if (response.ok) {
-            let data = await response.blob();
-
-            const csvURL = window.URL.createObjectURL(data);
-            const tempLink = document.createElement('a');
-            tempLink.href = csvURL;
-            tempLink.setAttribute('download', fileData.filename);
-            tempLink.click();
-            setIsLoading(false);
-        } else {
-            response.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
+                }),
+                isBlobOperation: true
+            }, handleDownloadResponse)
         }
+    }, [downloadedFile, authCtx.accessToken, getFilesRequest])
+
+    const onDownloadHandler = (fileData) => {
+        const formData = new FormData();
+        formData.append("file", fileData);
+        setDownloadedFile(fileData);
     }
 
     const renderTooltipOpen = (props) => (
@@ -145,7 +125,7 @@ const FileList = (props) => {
                     </tbody>
                 </Table>
             </div>
-            {selectedFileId != 0 &&
+            {selectedFileId !== 0 &&
                 <FileItemModal lgShow={lgShow} setLgShow={setLgShow} id={selectedFileId}></FileItemModal>}
         </Row>
     );

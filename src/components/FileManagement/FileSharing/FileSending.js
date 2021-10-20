@@ -1,15 +1,15 @@
 import { useState, useRef, useContext } from "react";
-import { Form, Button, Spinner, Card, Col, Row, Modal } from "react-bootstrap";
+import { Form, Button, Spinner, Card, Col, Modal } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 
 import { AuthContext } from "../../../store/auth-context";
+import useHttp from "../../hooks/use-http";
 
 const FileSending = (props) => {
     const receiverInputRef = useRef();
     const [file, setFile] = useState([]);
-    const [isLoading, setIsLoading] = useState();
-    const [error, setError] = useState();
     const [message, setMessage] = useState();
+    const { isLoading, error, sendRequest: fileSendRequest, setIsLoading, setError } = useHttp();
 
     const authCtx = useContext(AuthContext);
 
@@ -17,10 +17,19 @@ const FileSending = (props) => {
         setFile(e.target.files[0]);
     };
 
+    const handleSendResponse = (data) => {
+        if (data) {
+            setMessage('File sent succesfullly!');
+            setIsLoading(false);
+            props.onSuccessHandler();
+        } else {
+            setError('Receiver doesnt exist or he did not generate his public key!');
+            setIsLoading(false);
+        }
+    };
+
     const onSendHandler = async () => {
-        setError('');
         setMessage('');
-        setIsLoading(true);
 
         if (file.length === 0) {
             setError('Missing file');
@@ -38,34 +47,14 @@ const FileSending = (props) => {
         formData.append("receiver", receiverInputRef.current.value);
         formData.append("sender", authCtx.username);
 
-        let response = await fetch(
-            `http://localhost:8080/api/file/send`,
-            {
-                method: 'POST',
-                body: formData,
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + authCtx.accessToken
-                })
-            }
-        );
-
-        if (response.ok) {
-            let data = await response.json();
-            console.log(data);
-            if (data) {
-                setMessage('File sent succesfullly!');
-                setIsLoading(false);
-                props.onSuccessHandler();
-            } else {
-                setError('Receiver doesnt exist!');
-                setIsLoading(false);
-            }
-        } else {
-            response.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        }
+        fileSendRequest({
+            url: 'http://localhost:8080/api/file/send',
+            method: 'POST',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + authCtx.accessToken
+            }),
+            body: formData
+        }, handleSendResponse);
     }
 
     return (

@@ -8,11 +8,11 @@ import { KeyContext } from "../../store/key-management-context";
 import key from "../../assets/keyYellow.png";
 import empty from "../../assets/emptyNotes.svg";
 import classes from "./KeyManagement.module.css";
+import useHttp from "../hooks/use-http";
 
 const KeyManagement = () => {
     const [imageDidLoad, setImageDidLoad] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const { isLoading, error, sendRequest: keysRequest } = useHttp();
 
     const authCtx = useContext(AuthContext);
     const keyCtx = useContext(KeyContext);
@@ -21,68 +21,35 @@ const KeyManagement = () => {
         setImageDidLoad(true);
     }
 
-    useEffect(() => {
-        if (!keyCtx.publicKey && !keyCtx.privateKey) {
-            setIsLoading(true);
-            fetch(`http://localhost:8080/api/getkeys`,
-                {
-                    method: 'GET',
-                    headers: new Headers({
-                        'Authorization': 'Bearer ' + authCtx.accessToken
-                    })
-                }
-            ).then(res => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    throw res;
-                }
-            }).then(data => {
-                if (data && data.publicK && data.privateK) {
-                    keyCtx.storeKeys(data.publicK, data.privateK);
-                }
-                setIsLoading(false);
-            }).catch(err => {
-                err.json().then((body) => {
-                    setError(body.message);
-                    setIsLoading(false);
-                });
-            });
-        }
-    }, [authCtx.accessToken, keyCtx.publicKey, keyCtx.privateKey, keyCtx.storeKeys]);
+    const handleResponseGenerateKeys = (data) => {
+        keyCtx.storeKeys(data.publicK, data.privateK);
+    };
 
     useEffect(() => {
-        return () => {
-            console.log("cleaned up");
-            setIsLoading(false);
+        const handleResponseGetKeys = (data) => {
+            if (data && data.publicK && data.privateK) {
+                keyCtx.storeKeys(data.publicK, data.privateK);
+            }
         };
-    }, []);
+    
+        keysRequest({
+            url: 'http://localhost:8080/api/getkeys',
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + authCtx.accessToken
+            })
+        }, handleResponseGetKeys);
+    }, [authCtx.accessToken, keyCtx.publicKey, keyCtx.privateKey, keyCtx, keysRequest]);
+
 
     const onGenerateKeysHandler = () => {
-        setIsLoading(true);
-
-        fetch(`http://localhost:8080/api/generatekeys`,
-            {
-                method: 'GET',
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + authCtx.accessToken
-                })
-            }
-        ).then(res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw res;
-            }
-        }).then(data => {
-            keyCtx.storeKeys(data.publicK, data.privateK);
-            setIsLoading(false);
-        }).catch(err => {
-            err.json().then((body) => {
-                setError(body.message);
-                setIsLoading(false);
-            });
-        });
+        keysRequest({
+            url: 'http://localhost:8080/api/generatekeys',
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + authCtx.accessToken
+            })
+        }, handleResponseGenerateKeys);
     }
 
     let content;
