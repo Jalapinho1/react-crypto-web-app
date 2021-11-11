@@ -1,12 +1,11 @@
 import { useContext, useRef, useState } from "react";
-import { Card, Container, Form, Spinner, Image } from "react-bootstrap";
-
-import { useHistory } from "react-router-dom";
+import { Card, Container, Form, Spinner } from "react-bootstrap";
 
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../store/auth-context";
 import { KeyContext } from "../../store/key-management-context";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import classes from "./Auth.module.css";
 import lock2 from "../../assets/authIlustrYellow.svg";
@@ -16,8 +15,7 @@ const Login = () => {
     const usernameInputRef = useRef();
     const passwordInputRef = useRef();
     const [isPasswordShown, setIsPasswordShown] = useState(false);
-    const [imageDidLoad, setImageDidLoad] = useState(false);;
-    const { isLoading, error, sendRequest: loginRequest, setIsLoading, setError } = useHttp();
+    const { isLoading, error, sendRequest: loginRequest } = useHttp();
 
     const authCtx = useContext(AuthContext);
     const keyCtx = useContext(KeyContext);
@@ -55,28 +53,18 @@ const Login = () => {
         setIsPasswordShown((prevState) => !prevState);
     }
 
-    const onLoad = () => {
-        setImageDidLoad(true);
-    }
-
-    let imageClasses;
-    if (imageDidLoad) {
-        imageClasses = classes.fadeIn + " " + classes.imageHome + " " + classes.logo;
-    } else {
-        imageClasses = classes.imageHome + " " + classes.logo;
-    }
-
     return (
         <Container>
             <Card bg='light' className="shadow-sm light w-50 mx-auto mt-5">
                 <Card.Body>
                     <Form className={classes.formSignin}>
                         <div className="text-center mx-auto" >
-                            <Image
-                                className={imageClasses}
+                            <LazyLoadImage
+                                height={200}
+                                width={290}
+                                effect="blur"
                                 src={lock2}
-                                onLoad={onLoad}
-                                rounded />
+                            ></LazyLoadImage>
                         </div>
                         <h1 className="h3 my-4 text-center">Please login</h1>
                         <Form.Group controlId="formBasicUsername" className="mb-3 shadow-sm">

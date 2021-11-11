@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import { Card, Container, Form, Image, Spinner } from "react-bootstrap";
+import { Card, Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import classes from "./Auth.module.css";
 import register from "../../assets/securityIlustrYellow.svg";
@@ -14,7 +15,6 @@ const Register = () => {
     const passwordInputRef = useRef();
     const passwordRepeatInputRef = useRef();
     const [isPasswordShown, setIsPasswordShown] = useState(false);
-    const [imageDidLoad, setImageDidLoad] = useState(false);
 
     const { isLoading, error, sendRequest: registerRequest, setIsLoading, setError } = useHttp();
 
@@ -58,29 +58,18 @@ const Register = () => {
         setIsPasswordShown((prevState) => !prevState);
     }
 
-    const onLoad = () => {
-        setImageDidLoad(true);
-    }
-
-    let imageClasses;
-    if (imageDidLoad) {
-        imageClasses = classes.fadeIn + " " + classes.imageHome + " " + classes.logo2;
-    } else {
-        imageClasses = classes.imageHome + " " + classes.logo2;
-    }
-
     return (
         <Container>
             <Card bg='light' className="shadow-sm light w-50 mx-auto mt-5">
                 <Card.Body>
                     <Form className={classes.formSignin} onSubmit={submitHandler} autoComplete="off">
                         <div className="text-center mx-auto" >
-                            <Image
-                                className={imageClasses}
+                            <LazyLoadImage
+                                height={200}
+                                width={290}
+                                effect="blur"
                                 src={register}
-                                onLoad={onLoad}
-                                rounded
-                            />
+                            ></LazyLoadImage>
                         </div>
                         <h1 className="h3 my-4 text-center">Please register</h1>
                         <Form.Group controlId="formBasicUsername" className="mb-3 shadow-sm">

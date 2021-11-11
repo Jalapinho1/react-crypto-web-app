@@ -4,6 +4,7 @@ import { FaDownload } from "react-icons/fa";
 import FileList from "./FileList";
 import FileSending from "./FileSending";
 import msgImg from '../../../assets/msgImg.svg';
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const FileSharing = () => {
     const [wasFileSent, setWasFileSent] = useState(false);
@@ -20,13 +21,13 @@ const FileSharing = () => {
     return (
         <Container className="mt-3">
             <Card className="shadow-sm mt-4">
-                <div className="bg-light py-3 shadow-sm">
-                    <Card.Img
-                        variant="top"
-                        src={msgImg}
-                        width={250}
+                <div className="bg-light py-3 text-center shadow-sm">
+                    <LazyLoadImage
                         height={250}
-                    />
+                        width={250}
+                        effect="blur"
+                        src={msgImg}
+                    ></LazyLoadImage>
                 </div>
                 <Card.Body className='p-4'>
                     <div>

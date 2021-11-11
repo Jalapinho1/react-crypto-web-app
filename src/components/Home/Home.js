@@ -1,37 +1,27 @@
-import { useState } from "react";
-import { Card, Col, Container, Figure, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import banner from '../../assets/1082blue2.jpg';
 import sendImg from '../../assets/sendIlustrYellow.svg';
 import encryptImg from '../../assets/encryptIlustrYellow.svg';
 import keysImg from '../../assets/keysIlustrYellow.svg';
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import classes from './Home.module.css';
 
 const Home = () => {
-    const [imageDidLoad, setImageDidLoad] = useState(false);
-
-    const onLoad = () => {
-        setImageDidLoad(true);
-    }
-
     return (
         <>
-            <Row className="g-0 bg-primary text-center shadow-sm d-flex justify-content-center">
+            <Row className={classes.titleRow + " g-0 bg-primary text-center shadow-sm d-flex justify-content-center"}>
                 <Col md="auto" className="d-flex align-items-center">
                     <h1 className="text-white fw-bold">
                         Cryptography <br /> Web App
                     </h1>
                 </Col>
                 <Col md="auto" className="pt-1">
-                    <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
-                        <Figure.Image
-                            width={630}
-                            height={180}
-                            alt="171x180"
-                            src={banner}
-                            onLoad={onLoad}
-                        />
-                    </Figure>
+                    <LazyLoadImage
+                        width={630}
+                        effect="blur"
+                        src={banner}
+                    ></LazyLoadImage>
                 </Col>
             </Row>
             <Container className="my-4">
@@ -40,16 +30,13 @@ const Home = () => {
                         <Card className="shadow">
                             <Card.Body>
                                 <div className="text-center my-2">
-                                    <Figure>
-                                        <Figure.Image
-                                            width={220}
-                                            height={180}
-                                            alt="171x180"
-                                            src={encryptImg}
-                                        />
-                                    </Figure>
+                                    <LazyLoadImage
+                                        width={220}
+                                        effect="blur"
+                                        src={encryptImg}
+                                    ></LazyLoadImage>
                                 </div>
-                                <Card.Title className="text-center mx-3">
+                                <Card.Title>
                                     Encrypt/Decrypt files for yourself
                                 </Card.Title>
                                 <Card.Text>
@@ -67,14 +54,11 @@ const Home = () => {
                         <Card className="shadow">
                             <Card.Body>
                                 <div className="text-center my-2">
-                                    <Figure>
-                                        <Figure.Image
-                                            width={220}
-                                            height={180}
-                                            alt="171x180"
-                                            src={sendImg}
-                                        />
-                                    </Figure>
+                                    <LazyLoadImage
+                                        width={220}
+                                        effect="blur"
+                                        src={sendImg}
+                                    ></LazyLoadImage>
                                 </div>
                                 <Card.Title>Send & Comment files</Card.Title>
                                 <Card.Text>
@@ -89,14 +73,11 @@ const Home = () => {
                         <Card className="shadow">
                             <Card.Body>
                                 <div className="text-center my-3">
-                                    <Figure>
-                                        <Figure.Image
-                                            width={300}
-                                            height={180}
-                                            alt="171x180"
-                                            src={keysImg}
-                                        />
-                                    </Figure>
+                                    <LazyLoadImage
+                                        width={300}
+                                        effect="blur"
+                                        src={keysImg}
+                                    ></LazyLoadImage>
                                 </div>
                                 <Card.Title>Generate a key pair</Card.Title>
                                 <Card.Text>

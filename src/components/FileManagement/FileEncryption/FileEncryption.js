@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Form, Button, Container, Card, Spinner } from "react-bootstrap";
 import { AuthContext } from "../../../store/auth-context";
 import { KeyContext } from "../../../store/key-management-context";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { FaDownload } from "react-icons/fa";
 import cryptoImg from '../../../assets/downloadImg.svg';
@@ -23,9 +24,9 @@ const FileEncryption = () => {
 
         const oldFileName = file.name;
         const alreadyProcessed = oldFileName.includes("Encrypted") || oldFileName.includes("Decrypted");
-        if (alreadyProcessed){
+        if (alreadyProcessed) {
             newFileName = outputData.outputFileName + ' ' + file.name.slice(9);
-        }else{
+        } else {
             newFileName = outputData.outputFileName + ' ' + file.name;
         }
         const csvURL = window.URL.createObjectURL(data);
@@ -98,13 +99,13 @@ const FileEncryption = () => {
     return (
         <Container className="mt-3">
             <Card className="shadow-sm mt-4">
-                <div className="bg-light py-3 shadow-sm">
-                    <Card.Img
-                        variant="top"
-                        src={cryptoImg}
-                        width={250}
+                <div className="bg-light py-3 text-center shadow-sm">
+                    <LazyLoadImage
                         height={250}
-                    />
+                        width={250}
+                        effect="blur"
+                        src={cryptoImg}
+                    ></LazyLoadImage>
                 </div>
                 <Card.Body className='p-4'>
                     <div>

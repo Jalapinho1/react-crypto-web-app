@@ -1,9 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from "react";
-import { Button, Card, CardGroup, Container, Figure, Spinner } from "react-bootstrap";
+import { Fragment, useContext, useEffect } from "react";
+import { Button, Card, CardGroup, Container, Spinner } from "react-bootstrap";
 import { AuthContext } from "../../store/auth-context";
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { KeyContext } from "../../store/key-management-context";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import key from "../../assets/keyYellow.png";
 import empty from "../../assets/emptyNotes.svg";
@@ -11,15 +12,10 @@ import classes from "./KeyManagement.module.css";
 import useHttp from "../hooks/use-http";
 
 const KeyManagement = () => {
-    const [imageDidLoad, setImageDidLoad] = useState(false);
     const { isLoading, error, sendRequest: keysRequest } = useHttp();
 
     const authCtx = useContext(AuthContext);
     const keyCtx = useContext(KeyContext);
-
-    const onLoad = () => {
-        setImageDidLoad(true);
-    }
 
     const handleResponseGenerateKeys = (data) => {
         keyCtx.storeKeys(data.publicK, data.privateK);
@@ -31,7 +27,7 @@ const KeyManagement = () => {
                 keyCtx.storeKeys(data.publicK, data.privateK);
             }
         };
-    
+
         keysRequest({
             url: 'http://localhost:8080/api/getkeys',
             method: 'GET',
@@ -57,18 +53,14 @@ const KeyManagement = () => {
         content = <CardGroup className="my-4 shadow-sm">
             <Card>
                 <Card.Header as="h5" className="text-center">
-                    <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
-                        <Figure.Image
-                            className="shadow-sm"
-                            width={230}
-                            height={230}
-                            alt="171x180"
-                            src={key}
-                            onLoad={onLoad}
-                            roundedCircle
-                        />
-                    </Figure>
-                    <Card.Title className="text-center">Public key</Card.Title>
+                    <LazyLoadImage
+                        height={230}
+                        width={230}
+                        className="shadow-sm rounded-circle"
+                        effect="blur"
+                        src={key}
+                    ></LazyLoadImage>
+                    <Card.Title className="text-center mt-4">Public key</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Card.Text className={classes.keyDiv}>
@@ -85,18 +77,14 @@ const KeyManagement = () => {
             </Card>
             <Card>
                 <Card.Header as="h5" className="text-center">
-                    <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
-                        <Figure.Image
-                            className="shadow-sm"
-                            width={230}
-                            height={230}
-                            alt="171x180"
-                            src={key}
-                            onLoad={onLoad}
-                            roundedCircle
-                        />
-                    </Figure>
-                    <Card.Title className="text-center">Private key</Card.Title>
+                    <LazyLoadImage
+                        height={230}
+                        width={230}
+                        className="shadow-sm rounded-circle"
+                        effect="blur"
+                        src={key}
+                    ></LazyLoadImage>
+                    <Card.Title className="text-center mt-4">Private key</Card.Title>
                 </Card.Header>
                 <Card.Body className={classes.keyDiv}>
                     <Card.Text>
@@ -118,15 +106,12 @@ const KeyManagement = () => {
                 <h2>No keys available!</h2>
             </div>
             <div className="text-center mx-auto my-4">
-                <Figure className={imageDidLoad ? classes.fadeIn + " " + classes.imageHome : classes.imageHome}>
-                    <Figure.Image
-                        width={250}
-                        height={250}
-                        alt="171x180"
-                        src={empty}
-                        onLoad={onLoad}
-                    />
-                </Figure>
+                <LazyLoadImage
+                    width={250}
+                    className="w-100"
+                    effect="blur"
+                    src={empty}
+                ></LazyLoadImage>
             </div>
             <div className="text-center mx-auto">
                 <Button variant="primary" size="lg" onClick={onGenerateKeysHandler}>
