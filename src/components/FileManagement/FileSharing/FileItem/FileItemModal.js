@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Col, Form, ListGroup, Row, Button, Modal } from "react-bootstrap";
-import { AuthContext } from "../../../store/auth-context";
+import { AuthContext } from "../../../../store/auth-context";
 import moment from 'moment';
 
 import classes from './FileItemModal.module.css';
@@ -99,9 +99,6 @@ const FileItem = (props) => {
                     </div>
                     {comment.content}
                 </div>
-                {/* <Button variant="danger" size="sm" onClick={onCommentDeleteHandler}>
-                    <FaTrashAlt className="mb-1"></FaTrashAlt>
-                </Button> */}
             </ListGroup.Item>)
     }
     return (

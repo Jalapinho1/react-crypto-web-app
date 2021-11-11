@@ -1,9 +1,6 @@
 import { useState } from "react";
-
 import { Card, Col, Container, Figure, Row } from "react-bootstrap";
-
 import banner from '../../assets/1082blue2.jpg';
-
 import sendImg from '../../assets/sendIlustrYellow.svg';
 import encryptImg from '../../assets/encryptIlustrYellow.svg';
 import keysImg from '../../assets/keysIlustrYellow.svg';

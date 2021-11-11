@@ -3,7 +3,7 @@ import { OverlayTrigger, Row, Spinner, Table, Tooltip } from "react-bootstrap";
 import { AuthContext } from "../../../store/auth-context";
 
 import { FaDownload } from "react-icons/fa";
-import FileItemModal from '../FileItem/FileItemModal';
+import FileItemModal from './FileItem/FileItemModal';
 
 import classes from './FileList.module.css';
 import useHttp from "../../hooks/use-http";
